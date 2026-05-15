@@ -7,7 +7,7 @@ on:
 
 jobs:
   sync:
-    runs-on: artifacts-mirror-runer
+    runs-on: artifacts-mirror-runner
     permissions:
       contents: read
       packages: write
