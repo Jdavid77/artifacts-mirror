@@ -1,0 +1,26 @@
+name: mirror-charts
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: artifacts-mirror-runer
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Flux Mirror CLI
+        uses: fluxcd/flux-mirror/actions/setup@main
+      - name: Login to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sync
+        run: flux-mirror sync -c flux-mirror.yaml --no-progress

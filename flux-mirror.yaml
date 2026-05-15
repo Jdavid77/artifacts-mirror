@@ -1,0 +1,9 @@
+apiVersion: mirror.fluxcd.io/v1alpha1
+kind: Config
+artifacts:
+  - source: grimmory-tools/grimmory
+    destination: ghcr.io/Jdavid77/artifacts-mirror
+    selector:
+      semver: ">= 2.0.0"
+      limit: 5
+    includeReferrers: true
