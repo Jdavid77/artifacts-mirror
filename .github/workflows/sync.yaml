@@ -1,4 +1,4 @@
-name: mirror-charts
+name: Artifacts Mirror Sync
 
 on:
   schedule:
