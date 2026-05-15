@@ -1,7 +1,7 @@
 apiVersion: mirror.fluxcd.io/v1alpha1
 kind: Config
 artifacts:
-  - source: grimmory-tools/grimmory
+  - source: ghcr.io/grimmory-tools/grimmory
     destination: ghcr.io/jdavid77/artifacts-mirror
     selector:
       semver: ">= 2.0.0"
