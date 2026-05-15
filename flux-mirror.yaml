@@ -7,3 +7,15 @@ artifacts:
       semver: ">= 3.0.0"
       limit: 5
     includeReferrers: true
+  - source: ghcr.io/rendercv/rendercv
+    destination: ghcr.io/jdavid77/rendercv
+    selector:
+      semver: ">= 2.0.0"
+      limit: 5
+    includeReferrers: true
+  - source: ghcr.io/calibrain/shelfmark
+    destination: ghcr.io/jdavid77/shelfmark
+    selector:
+      semver: ">= 1.0.0"
+      limit: 5
+    includeReferrers: true
