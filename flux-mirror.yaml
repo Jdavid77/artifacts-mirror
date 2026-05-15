@@ -2,7 +2,7 @@ apiVersion: mirror.fluxcd.io/v1alpha1
 kind: Config
 artifacts:
   - source: ghcr.io/grimmory-tools/grimmory
-    destination: ghcr.io/jdavid77/artifacts-mirror
+    destination: ghcr.io/jdavid77/grimmory
     selector:
       semver: ">= 3.0.0"
       limit: 5
