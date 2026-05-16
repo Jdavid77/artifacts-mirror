@@ -19,3 +19,15 @@ artifacts:
       semver: ">= 1.0.0"
       limit: 5
     includeReferrers: true
+  - source: ghcr.io/seanmorley15/adventurelog-backend
+    destination: ghcr.io/jdavid77/adventurelog-backend
+    selector:
+      semver: ">= 0.0.0"
+      limit: 5
+    includeReferrers: true
+  - source: ghcr.io/seanmorley15/adventurelog-frontend
+    destination: ghcr.io/jdavid77/adventurelog-frontend
+    selector:
+      semver: ">= 0.0.0"
+      limit: 5
+    includeReferrers: true
