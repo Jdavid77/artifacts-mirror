@@ -31,3 +31,9 @@ artifacts:
       semver: ">= 0.0.0"
       limit: 5
     includeReferrers: true
+  - source: ghcr.io/czlonkowski/n8n-mcp
+    destination: ghcr.io/jdavid77/n8n-mcp
+    selector:
+      semver: ">= 2.0.0"
+      limit: 5
+    includeReferrers: true
