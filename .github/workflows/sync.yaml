@@ -23,4 +23,4 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Sync
-        run: flux-mirror sync flux-mirror.yaml --no-progress
+        run: flux-mirror sync flux-mirror.yaml --no-progress --drift-exit-code=0
