@@ -38,3 +38,9 @@ artifacts:
       limit: 5
     includeReferrers: true
     overwrite:: true
+  - source: docker.io/mauriceboe/trek
+    destination: ghcr.io/jdavid77/trek
+    selector:
+      semver: ">= 3.0.0"
+      limit: 5
+    includeReferrers: true
