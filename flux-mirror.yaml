@@ -2,37 +2,37 @@ apiVersion: mirror.plugin.fluxcd.io/v1beta2
 kind: Config
 artifacts:
   - source: ghcr.io/grimmory-tools/grimmory
-    destination: ghcr.io/jdavid77/grimmory
+    destination: ${MIRROR_REGISTRY:-ghcr.io/jdavid77}/grimmory
     selector:
       semver: ">= 3.0.0"
       limit: 5
     includeReferrers: true
   - source: ghcr.io/rendercv/rendercv
-    destination: ghcr.io/jdavid77/rendercv
+    destination: ${MIRROR_REGISTRY:-ghcr.io/jdavid77}/rendercv
     selector:
       semver: ">= 2.0.0"
       limit: 5
     includeReferrers: true
   - source: ghcr.io/calibrain/shelfmark
-    destination: ghcr.io/jdavid77/shelfmark
+    destination: ${MIRROR_REGISTRY:-ghcr.io/jdavid77}/shelfmark
     selector:
       semver: ">= 1.0.0"
       limit: 5
     includeReferrers: true
   - source: ghcr.io/seanmorley15/adventurelog
-    destination: ghcr.io/jdavid77/adventurelog
+    destination: ${MIRROR_REGISTRY:-ghcr.io/jdavid77}/adventurelog
     selector:
       semver: ">= 0.0.0"
       limit: 5
     includeReferrers: true
   - source: ghcr.io/czlonkowski/n8n-mcp
-    destination: ghcr.io/jdavid77/n8n-mcp
+    destination: ${MIRROR_REGISTRY:-ghcr.io/jdavid77}/n8n-mcp
     selector:
       semver: ">= 2.0.0"
       limit: 5
     includeReferrers: true
   - source: docker.io/mauriceboe/trek
-    destination: ghcr.io/jdavid77/trek
+    destination: ${MIRROR_REGISTRY:-ghcr.io/jdavid77}/trek
     selector:
       semver: ">= 3.0.0"
       limit: 5
