@@ -1,0 +1,86 @@
+name: PostGIS Multiarch Build
+
+# Upstream postgis/postgis only publishes linux/amd64. This rebuilds the
+# upstream Dockerfiles for amd64 and arm64 (arm64 under QEMU) and pushes
+# multi-arch images to ghcr.io/jdavid77/postgis.
+
+on:
+  schedule:
+    # weekly, one day after upstream's Monday build, to pick up base image updates
+    - cron: "0 6 * * 2"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/postgis.yaml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/postgis.yaml
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        # each <postgres>-<postgis> must be a folder in postgis/docker-postgis
+        postgres: [18, 19]
+        postgis: ['3.7']
+
+    name: build ${{ matrix.postgres }}-${{ matrix.postgis }}
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      packages: write
+    env:
+      VERSION: ${{ matrix.postgres }}-${{ matrix.postgis }}
+    steps:
+
+      - name: Resolve upstream commit
+        id: upstream
+        run: echo "sha=$(git ls-remote https://github.com/postgis/docker-postgis.git refs/heads/master | cut -f1)" >> "$GITHUB_OUTPUT"
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ghcr.io/jdavid77/postgis
+          flavor: |
+            latest=false
+          # latest: keep the == in sync with the newest postgres in the matrix
+          tags: |
+            type=raw,value=${{ env.VERSION }}
+            type=raw,value=${{ matrix.postgres }}
+            type=raw,value=latest,enable=${{ matrix.postgres == 19 }}
+          labels: |
+            org.opencontainers.image.title=postgis
+            org.opencontainers.image.version=${{ env.VERSION }}
+            org.opencontainers.image.source=https://github.com/postgis/docker-postgis
+            org.opencontainers.image.revision=${{ steps.upstream.outputs.sha }}
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
+
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - name: Login to GHCR
+        if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: https://github.com/postgis/docker-postgis.git#${{ steps.upstream.outputs.sha }}:${{ env.VERSION }}
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          pull: true
+          no-cache: true
+          push: ${{ github.ref == 'refs/heads/main' }}
